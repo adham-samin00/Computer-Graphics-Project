@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1777647804 source:c:\spring 25-26\computer graphics\final\project\urban_life_in_motion\main.cpp
+1777724374 source:c:\spring 25-26\computer graphics\final\project\urban_life_in_motion\main.cpp
 	<windows.h>
 	<GL/glut.h>
 	<math.h>

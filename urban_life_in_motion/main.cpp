@@ -18,6 +18,9 @@ int rainSoundPlaying = 0;
 int windDirection = 0;     // 0 = no wind, 1 = left to right, -1 = right to left
 float windWave = 0.0f;
 
+// ========== Start screen global ==========
+int showStartScreen = 1;   // 1 = show intro screen, 0 = show project animation
+
 const int RAIN_COUNT = 250;
 float rainX[RAIN_COUNT];
 float rainY[RAIN_COUNT];
@@ -51,6 +54,8 @@ const float rightStopX = zebraLeft - 0.03f;
 const float leftStopX = zebraRight + 0.03f;
 
 // ========== Function prototypes ==========
+void drawText(float x, float y, const char *text);
+void drawStartScreen();
 void initRain();
 void drawSky();
 void drawStars();
@@ -78,6 +83,71 @@ void drawZebraLane(float topY, float bottomY);
 void moveRightLane(float *frontCar, float *backCar, float speed);
 void moveLeftLane(float *frontCar, float *backCar, float speed);
 float getGreenOrYellowSpeed();
+
+
+// ========== Text drawing helper ==========
+void drawText(float x, float y, const char *text) {
+    glRasterPos2f(x, y);
+
+    for(int i = 0; text[i] != '\0'; i++) {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, text[i]);
+    }
+}
+
+// ========== Project start screen ==========
+void drawStartScreen() {
+    glClearColor(0.05f, 0.07f, 0.12f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Border
+    glColor3f(0.90f, 0.90f, 0.90f);
+    glBegin(GL_LINE_LOOP);
+    glVertex2f(-0.90f, -0.90f);
+    glVertex2f( 0.90f, -0.90f);
+    glVertex2f( 0.90f,  0.90f);
+    glVertex2f(-0.90f,  0.90f);
+    glEnd();
+
+    // University and course information
+    glColor3f(1.0f, 1.0f, 1.0f);
+    drawText(-0.30f, 0.78f, "American International University - Bangladesh");
+
+    glColor3f(0.90f, 0.90f, 0.30f);
+    drawText(-0.16f, 0.68f, "Computer Graphics");
+
+    glColor3f(1.0f, 1.0f, 1.0f);
+    drawText(-0.08f, 0.58f, "Section: L");
+
+    // Project title
+    glColor3f(0.20f, 0.90f, 1.0f);
+    drawText(-0.28f, 0.42f, "PROJECT ON: URBAN LIFE IN MOTION");
+
+    // Group members
+    glColor3f(1.0f, 1.0f, 1.0f);
+    drawText(-0.35f, 0.22f, "Adham Samin [ID: 23-53329-3]");
+    drawText(-0.35f, 0.12f, "Topu Roy [ID: 23-53318-3]");
+    drawText(-0.35f, 0.02f, "Al Rahit [ID: 23-53316-3]");
+    drawText(-0.35f,-0.08f, "Utsho Karmakar [ID: 23-53327-3]");
+
+    // Animation controls
+    glColor3f(0.90f, 0.90f, 0.30f);
+    drawText(-0.18f, -0.25f, "Animation Controls");
+
+    glColor3f(0.85f, 0.85f, 0.85f);
+    drawText(-0.55f, -0.35f, "Press R, Y, G : Control traffic light");
+    drawText(-0.55f, -0.43f, "Press D       : Day mode");
+    drawText(-0.55f, -0.51f, "Press N       : Night mode");
+    drawText(-0.55f, -0.59f, "Press T       : Rain on/off");
+    drawText(-0.55f, -0.67f, "Press L       : Wind left to right");
+    drawText(-0.55f, -0.75f, "Press K       : Wind right to left");
+    drawText(-0.55f, -0.83f, "Press O       : Stop wind");
+
+    // Start instruction
+    glColor3f(0.20f, 1.0f, 0.30f);
+    drawText(-0.20f, -0.95f, "Press S to START");
+
+    glFlush();
+}
 
 // ========== Rain initialization ==========
 void initRain() {
@@ -872,17 +942,47 @@ void drawLampPosts() {
     glVertex2f(0.80f, 0.10f);
     glEnd();
 
-    glColor3f(1.0f, 0.95f, 0.60f);
-    glBegin(GL_POLYGON);
-    for(int i = 0; i < 200; i++) {
-        float pi = 3.1416f;
-        float A = (i * 2 * pi) / 200;
-        float r = 0.015f;
-        float x = 0.87f + r * cos(A);
-        float y = 0.095f + r * sin(A);
-        glVertex2f(x, y);
+
+    if(dayValue <= 0.4f || rainOn == 1.0f)
+    {
+        glColor3f(0.8f, 0.8f, 0.8f);
+        glBegin(GL_POLYGON);
+        for(int i = 0; i < 200; i++) {
+            float pi = 3.1416f;
+            float A = (i * 2 * pi) / 200;
+            float r = 0.025f;
+            float x = 0.87f + r * cos(A);
+            float y = 0.095f + r * sin(A);
+            glVertex2f(x, y);
+        }
+        glEnd();
+        glColor3f(1.0f, 1.0f, 1.0f);
+        glBegin(GL_POLYGON);
+        for(int i = 0; i < 200; i++) {
+            float pi = 3.1416f;
+            float A = (i * 2 * pi) / 200;
+            float r = 0.015f;
+            float x = 0.87f + r * cos(A);
+            float y = 0.095f + r * sin(A);
+            glVertex2f(x, y);
+        }
+        glEnd();
     }
-    glEnd();
+
+    else
+    {
+        glColor3f(1.0f, 0.95f, 0.60f);
+        glBegin(GL_POLYGON);
+        for(int i = 0; i < 200; i++) {
+            float pi = 3.1416f;
+            float A = (i * 2 * pi) / 200;
+            float r = 0.015f;
+            float x = 0.87f + r * cos(A);
+            float y = 0.095f + r * sin(A);
+            glVertex2f(x, y);
+        }
+        glEnd();
+    }
 }
 
 // Bangladesh flags
@@ -1738,11 +1838,11 @@ void moveRightLane(float *frontCar, float *backCar, float speed) {
     float first = *frontCar;
     float second = *backCar;
 
-    if(second > first) {
-        float temp = first;
-        first = second;
-        second = temp;
-    }
+//    if(second > first) {
+//        float temp = first;
+//        first = second;
+//        second = temp;
+//    }
 
     if(lightState == 'R') {
         if(first + carWidth > rightStopX) {
@@ -1820,6 +1920,11 @@ void moveLeftLane(float *frontCar, float *backCar, float speed) {
 
 // ========== Combined display ==========
 void display() {
+
+    if(showStartScreen == 1) {
+        drawStartScreen();
+        return;
+    }
     drawSky();
     drawStars();
     drawSunMoon();
@@ -1841,7 +1946,12 @@ void display() {
 
 // ========== Combined update ==========
 void update(int value) {
-    // ----- Your environment updates -----
+
+    if(showStartScreen == 1) {
+    glutPostRedisplay();
+    glutTimerFunc(20, update, 0);
+    return;
+    }
     // ----- Cloud movement with wind -----
     if(windDirection == 1) {
         cloudMove += 0.004f;      // wind left to right, clouds move faster right
@@ -1907,6 +2017,15 @@ void update(int value) {
 
 // ========== Combined keyboard handling ==========
 void handleKeypress(unsigned char key, int x, int y) {
+    // Start screen control
+    if(showStartScreen == 1) {
+        if(key == 's' || key == 'S') {
+            showStartScreen = 0;
+        }
+
+        glutPostRedisplay();
+        return;
+    }
     // Traffic light controls (R, G, Y)
     switch(key) {
         case 'r':
@@ -1970,7 +2089,7 @@ int main(int argc, char** argv) {
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowSize(1280, 720);
     glutInitWindowPosition(40, 30);
-    glutCreateWindow("Urban Life in Motion - Merged");
+    glutCreateWindow("Urban Life in Motion");
 
     init();
     initRain();
