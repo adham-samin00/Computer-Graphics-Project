@@ -5,7 +5,7 @@
 #include <mmsystem.h>
 #pragma comment(lib, "winmm.lib")
 
-// ========== Your environment globals ==========
+
 float cloudMove = 0.0f;
 float dayValue = 1.0f;
 float targetDayValue = 1.0f;
@@ -14,20 +14,20 @@ int rainOn = 0;
 float rainIntensity = 0.0f;
 int rainSoundPlaying = 0;
 
-// ========== Wind globals ==========
-int windDirection = 0;     // 0 = no wind, 1 = left to right, -1 = right to left
+
+int windDirection = 0;
 float windWave = 0.0f;
 
-// ========== Start screen global ==========
-int showStartScreen = 1;   // 1 = show intro screen, 0 = show project animation
+
+int showStartScreen = 1;
 
 const int RAIN_COUNT = 250;
 float rainX[RAIN_COUNT];
 float rainY[RAIN_COUNT];
 float rainSpeed[RAIN_COUNT];
 
-// ========== Topu's traffic globals ==========
-char lightState = 'G';      // 'R', 'Y', 'G'
+
+char lightState = 'G';
 int running = 1;
 
 float normalSpeed = 0.008f;
@@ -53,7 +53,7 @@ const float zebraRight = 0.06f;
 const float rightStopX = zebraLeft - 0.03f;
 const float leftStopX = zebraRight + 0.03f;
 
-// ========== Function prototypes ==========
+// Function prototypes
 void drawText(float x, float y, const char *text);
 void drawStartScreen();
 void initRain();
@@ -70,8 +70,8 @@ float getWindBend();
 void drawTrees();
 void drawLampPosts();
 void drawFlags();
-void drawRoad();          // Topu's road with lanes, zebra crossing
-void drawTrafficLight();  // Topu's traffic light
+void drawRoad();
+void drawTrafficLight();
 void drawSingleCar(float carX, float y, float r, float g, float b, int direction);
 void drawCars();
 void display();
@@ -85,7 +85,7 @@ void moveLeftLane(float *frontCar, float *backCar, float speed);
 float getGreenOrYellowSpeed();
 
 
-// ========== Text drawing helper ==========
+// Draw Text
 void drawText(float x, float y, const char *text) {
     glRasterPos2f(x, y);
 
@@ -94,7 +94,7 @@ void drawText(float x, float y, const char *text) {
     }
 }
 
-// ========== Project start screen ==========
+// start scree
 void drawStartScreen() {
     glClearColor(0.05f, 0.07f, 0.12f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -108,7 +108,7 @@ void drawStartScreen() {
     glVertex2f(-0.90f,  0.90f);
     glEnd();
 
-    // University and course information
+
     glColor3f(1.0f, 1.0f, 1.0f);
     drawText(-0.30f, 0.78f, "American International University - Bangladesh");
 
@@ -118,18 +118,18 @@ void drawStartScreen() {
     glColor3f(1.0f, 1.0f, 1.0f);
     drawText(-0.08f, 0.58f, "Section: L");
 
-    // Project title
+
     glColor3f(0.20f, 0.90f, 1.0f);
     drawText(-0.28f, 0.42f, "PROJECT ON: URBAN LIFE IN MOTION");
 
-    // Group members
+
     glColor3f(1.0f, 1.0f, 1.0f);
     drawText(-0.35f, 0.22f, "Adham Samin [ID: 23-53329-3]");
     drawText(-0.35f, 0.12f, "Topu Roy [ID: 23-53318-3]");
     drawText(-0.35f, 0.02f, "Al Rahit [ID: 23-53316-3]");
     drawText(-0.35f,-0.08f, "Utsho Karmakar [ID: 23-53327-3]");
 
-    // Animation controls
+
     glColor3f(0.90f, 0.90f, 0.30f);
     drawText(-0.18f, -0.25f, "Animation Controls");
 
@@ -142,14 +142,14 @@ void drawStartScreen() {
     drawText(-0.55f, -0.75f, "Press K       : Wind right to left");
     drawText(-0.55f, -0.83f, "Press O       : Stop wind");
 
-    // Start instruction
+
     glColor3f(0.20f, 1.0f, 0.30f);
     drawText(-0.20f, -0.95f, "Press S to START");
 
     glFlush();
 }
 
-// ========== Rain initialization ==========
+// Rain initialization
 void initRain() {
     for(int i = 0; i < RAIN_COUNT; i++) {
         rainX[i] = -1.0f + (rand() % 200) / 100.0f;
@@ -161,7 +161,6 @@ void initRain() {
 //Rain sound
 void startRainSound() {
     if (!rainSoundPlaying) {
-        // Replace "rain.wav" with the actual path to your sound file
         PlaySound(TEXT("C:/Spring 25-26/Computer Graphics/FINAL/Project/urban_life_in_motion/boons_freak-rain-sound-188158.wav"), NULL, SND_ASYNC | SND_LOOP | SND_NODEFAULT);
         rainSoundPlaying = 1;
     }
@@ -176,7 +175,6 @@ void stopRainSound() {
 
 //void startCitySound() {
 //    if (!citySoundPlaying) {
-//        // Use relative path if the .wav is in the same folder as the .exe
 //        if (!PlaySound(TEXT("C:/Spring 25-26/Computer Graphics/FINAL/Project/urban_life_in_motion/baranova_n-city-birds-444667.wav"), NULL, SND_ASYNC | SND_LOOP | SND_NODEFAULT)) {
 //            // If file not found, fallback to a simple beep or ignore
 //            // MessageBeep(MB_ICONASTERISK);
@@ -187,13 +185,12 @@ void stopRainSound() {
 //
 //void stopCitySound() {
 //    if (citySoundPlaying) {
-//        // Stop city sound only if we don't want it, but you'll call this only on exit
 //        PlaySound(NULL, NULL, 0);
 //        citySoundPlaying = 0;
 //    }
 //}
 
-// ========== Your enhanced sky with gradient ==========
+// sky with gradient
 void drawSky() {
     float r = 0.05f + dayValue * 0.40f;
     float g = 0.07f + dayValue * 0.68f;
@@ -227,11 +224,11 @@ void drawSky() {
     glEnd();
 }
 
-// ========== Your sun/moon with day/night ==========
+// sun/moon with day/night
 void drawSunMoon() {
-    float sunY = 0.80f - (1.0f - dayValue) * 0.35f;
+    float sunY = 0.80f - (1.0f - dayValue) * 0.55f;
 
-    if(dayValue > 0.05f && rainIntensity < 0.85f) {
+    if(dayValue > 0.05f && rainIntensity < 0.55f) {
         glColor3f(1.0f, 0.82f, 0.0f);
         glBegin(GL_POLYGON);
         for(int i = 0; i < 200; i++) {
@@ -268,6 +265,7 @@ void drawSunMoon() {
         }
         glEnd();
 
+        // sun rays
         glColor3f(1.0f, 0.85f, 0.15f);
         glBegin(GL_LINES);
         glVertex2f(0.75f, sunY + 0.10f); glVertex2f(0.75f, sunY + 0.16f);
@@ -308,7 +306,7 @@ void drawSunMoon() {
     }
 }
 
-// ========== Your stars ==========
+// stars
 void drawStars() {
     if(dayValue > 0.00f || rainIntensity > 0.0f) return;
 
@@ -325,7 +323,7 @@ void drawStars() {
     glEnd();
 }
 
-// ========== Your moving clouds ==========
+// moving clouds
 void drawClouds() {
     glPushMatrix();
     glTranslatef(cloudMove, 0.0f, 0.0f);
@@ -439,7 +437,7 @@ void drawClouds() {
     glPopMatrix();
 }
 
-// ========== Your rain clouds (dark) ==========
+// rain clouds
 void drawRainClouds() {
     if(rainIntensity <= 0.0f) return;
 
@@ -449,7 +447,7 @@ void drawRainClouds() {
     float c = 0.28f - rainIntensity * 0.06f;
     glColor3f(c, c, c);
 
-    // upper continuous cloud belt
+    // upper continuous cloud
     glBegin(GL_POLYGON);
     for(int i = 0; i < 200; i++) {
         float pi = 3.1416f;
@@ -590,7 +588,7 @@ void drawRainClouds() {
 
     glPopMatrix();
 }
-// ========== Your rain drops ==========
+// rain drops
 void drawRain() {
     if(rainIntensity <= 0.0f) return;
 
@@ -606,14 +604,14 @@ void drawRain() {
         glColor3f(0.45f * shade, 0.55f * shade, 0.75f * shade);
 
         glVertex2f(rainX[i], rainY[i]);
-        glVertex2f(rainX[i] + 0.035f, rainY[i] - length);
+        glVertex2f(rainX[i] + 0.025f, rainY[i] - length);
     }
 
     glEnd();
     glLineWidth(1.0f);
 }
 
-// ========== Wind bending helper ==========
+// Wind bending
 float getWindBend() {
     if(windDirection == 1) {
         return 0.018f + 0.008f * sin(windWave);   // bend to right
@@ -624,7 +622,7 @@ float getWindBend() {
     return 0.0f;
 }
 
-// ========== Wind effect lines ==========
+// Wind effect lines
 void drawWindEffect() {
     if(windDirection == 0) return;
 
@@ -657,7 +655,7 @@ void drawWindTree(float tx, float baseY) {
 
     float bend = getWindBend();
 
-    // Trunk - bottom fixed, top bends with wind
+    // bottom fixed, top bends with wind
     glColor3f(0.45f, 0.25f, 0.08f);
     glBegin(GL_QUADS);
     glVertex2f(tx - 0.015f, baseY);
@@ -1053,11 +1051,11 @@ void drawFlags() {
     glEnd();
 }
 
-// ========== Your realistic buildings with dynamic window lighting ==========
+// buildings
 void drawBuildings() {
     // Determine window color based on rain or night
     float winR, winG, winB;
-    if (rainIntensity > 0.0f || dayValue < 0.3f) {
+    if (rainIntensity > 0.4f || dayValue < 0.3f) {
         // Yellowish (lights on)
         winR = 1.0f;
         winG = 0.85f;
@@ -1069,9 +1067,8 @@ void drawBuildings() {
         winB = 1.0f;
     }
 
-    // ==================== BACKGROUND LAYER (TALLER BUILDINGS BEHIND) ====================
 
-    // Background Building 1 - Dark gray
+    // Background Building 1
     glColor3f(0.45f, 0.45f, 0.50f);
     glBegin(GL_QUADS);
     glVertex2f(-1.00f, -0.15f);
@@ -1079,7 +1076,7 @@ void drawBuildings() {
     glVertex2f(-0.70f, 0.45f);
     glVertex2f(-1.00f, 0.45f);
     glEnd();
-    // Roof - darker gray
+    // Roof
     glColor3f(0.35f, 0.35f, 0.40f);
     glBegin(GL_TRIANGLES);
     glVertex2f(-1.00f, 0.45f);
@@ -1111,7 +1108,7 @@ void drawBuildings() {
     glVertex2f(-0.87f, -0.15f); glVertex2f(-0.83f, -0.15f); glVertex2f(-0.83f, -0.05f); glVertex2f(-0.87f, -0.05f);
     glEnd();
 
-    // Background Building 2 - Brick red
+    // Background Building 2
     glColor3f(0.65f, 0.35f, 0.30f);
     glBegin(GL_QUADS);
     glVertex2f(-0.70f, -0.15f);
@@ -1147,7 +1144,7 @@ void drawBuildings() {
     glVertex2f(-0.57f, -0.15f); glVertex2f(-0.53f, -0.15f); glVertex2f(-0.53f, -0.05f); glVertex2f(-0.57f, -0.05f);
     glEnd();
 
-    // Background Building 3 - Tan / beige
+    // Background Building 3
     glColor3f(0.70f, 0.65f, 0.55f);
     glBegin(GL_QUADS);
     glVertex2f(-0.40f, -0.15f);
@@ -1187,7 +1184,7 @@ void drawBuildings() {
     glVertex2f(-0.30f, -0.15f); glVertex2f(-0.26f, -0.15f); glVertex2f(-0.26f, -0.05f); glVertex2f(-0.30f, -0.05f);
     glEnd();
 
-    // Background Building 4 - Light gray
+    // Background Building 4
     glColor3f(0.55f, 0.55f, 0.60f);
     glBegin(GL_QUADS);
     glVertex2f(-0.15f, -0.15f);
@@ -1227,7 +1224,7 @@ void drawBuildings() {
     glVertex2f(-0.02f, -0.15f); glVertex2f(0.02f, -0.15f); glVertex2f(0.02f, -0.05f); glVertex2f(-0.02f, -0.05f);
     glEnd();
 
-    // Background Building 5 - Brown
+    // Background Building 5
     glColor3f(0.50f, 0.35f, 0.25f);
     glBegin(GL_QUADS);
     glVertex2f(0.10f, -0.15f);
@@ -1263,7 +1260,7 @@ void drawBuildings() {
     glVertex2f(0.22f, -0.15f); glVertex2f(0.26f, -0.15f); glVertex2f(0.26f, -0.05f); glVertex2f(0.22f, -0.05f);
     glEnd();
 
-    // Background Building 6 - Slate gray
+    // Background Building 6
     glColor3f(0.40f, 0.45f, 0.50f);
     glBegin(GL_QUADS);
     glVertex2f(0.40f, -0.15f);
@@ -1303,7 +1300,7 @@ void drawBuildings() {
     glVertex2f(0.52f, -0.15f); glVertex2f(0.56f, -0.15f); glVertex2f(0.56f, -0.05f); glVertex2f(0.52f, -0.05f);
     glEnd();
 
-    // Background Building 7 - Warm gray
+    // Background Building 7
     glColor3f(0.60f, 0.58f, 0.55f);
     glBegin(GL_QUADS);
     glVertex2f(0.70f, -0.15f);
@@ -1311,7 +1308,7 @@ void drawBuildings() {
     glVertex2f(1.00f, 0.43f);
     glVertex2f(0.70f, 0.43f);
     glEnd();
-    // Dome roof
+    // roof
     glColor3f(0.48f, 0.46f, 0.44f);
     glBegin(GL_TRIANGLES);
     glVertex2f(0.70f, 0.43f);
@@ -1343,9 +1340,9 @@ void drawBuildings() {
     glVertex2f(0.82f, -0.15f); glVertex2f(0.86f, -0.15f); glVertex2f(0.86f, -0.05f); glVertex2f(0.82f, -0.05f);
     glEnd();
 
-    // ==================== FOREGROUND BUILDINGS (OVERLAPPING) ====================
+    // Foreground
 
-    // Building 1 - Dark brick
+    // Building 1
     glColor3f(0.55f, 0.30f, 0.25f);
     glBegin(GL_QUADS);
     glVertex2f(-0.98f, -0.15f);
@@ -1380,7 +1377,7 @@ void drawBuildings() {
     glVertex2f(-0.90f, -0.15f); glVertex2f(-0.86f, -0.15f); glVertex2f(-0.86f, -0.05f); glVertex2f(-0.90f, -0.05f);
     glEnd();
 
-    // Building 2 - Concrete gray
+    // Building 2
     glColor3f(0.48f, 0.50f, 0.52f);
     glBegin(GL_QUADS);
     glVertex2f(-0.73f, -0.15f);
@@ -1415,7 +1412,7 @@ void drawBuildings() {
     glVertex2f(-0.65f, -0.15f); glVertex2f(-0.61f, -0.15f); glVertex2f(-0.61f, -0.05f); glVertex2f(-0.65f, -0.05f);
     glEnd();
 
-    // Hospital - Clean off-white
+    // Hospital
     glColor3f(0.92f, 0.90f, 0.88f);
     glBegin(GL_QUADS);
     glVertex2f(-0.48f, -0.15f);
@@ -1452,7 +1449,7 @@ void drawBuildings() {
     glVertex2f(-0.41f, -0.15f); glVertex2f(-0.35f, -0.15f); glVertex2f(-0.35f, -0.05f); glVertex2f(-0.41f, -0.05f);
     glEnd();
 
-    // Building 3 - Medium brown
+    // Building 3
     glColor3f(0.60f, 0.45f, 0.35f);
     glBegin(GL_QUADS);
     glVertex2f(-0.23f, -0.15f);
@@ -1460,7 +1457,7 @@ void drawBuildings() {
     glVertex2f(-0.03f, 0.30f);
     glVertex2f(-0.23f, 0.30f);
     glEnd();
-    // Dome roof
+    // roof
     glColor3f(0.48f, 0.36f, 0.28f);
     glBegin(GL_TRIANGLES);
     glVertex2f(-0.23f, 0.30f);
@@ -1487,7 +1484,7 @@ void drawBuildings() {
     glVertex2f(-0.15f, -0.15f); glVertex2f(-0.11f, -0.15f); glVertex2f(-0.11f, -0.05f); glVertex2f(-0.15f, -0.05f);
     glEnd();
 
-    // SCHOOL - Light cream/yellow (kept similar to original but less vibrant)
+    // SCHOOL
     glColor3f(0.85f, 0.80f, 0.65f);
     glBegin(GL_QUADS);
     glVertex2f(0.02f, -0.15f);
@@ -1495,7 +1492,7 @@ void drawBuildings() {
     glVertex2f(0.27f, 0.35f);
     glVertex2f(0.02f, 0.35f);
     glEnd();
-    // Flat roof
+    // roof
     glColor3f(0.68f, 0.60f, 0.48f);
     glBegin(GL_QUADS);
     glVertex2f(0.01f, 0.35f); glVertex2f(0.28f, 0.35f); glVertex2f(0.28f, 0.38f); glVertex2f(0.01f, 0.38f);
@@ -1523,7 +1520,7 @@ void drawBuildings() {
     glVertex2f(0.12f, -0.15f); glVertex2f(0.17f, -0.15f); glVertex2f(0.17f, -0.05f); glVertex2f(0.12f, -0.05f);
     glEnd();
 
-    // Fire Service Station - Dark red
+    // Fire Service Station
     glColor3f(0.70f, 0.25f, 0.20f);
     glBegin(GL_QUADS);
     glVertex2f(0.32f, -0.15f);
@@ -1544,7 +1541,7 @@ void drawBuildings() {
     glVertex2f(0.52f, 0.28f);
     glVertex2f(0.43f, 0.33f);
     glEnd();
-    // Emblem - Gold
+    // Emblem
     glColor3f(0.85f, 0.72f, 0.25f);
     glBegin(GL_QUADS);
     glVertex2f(0.41f, 0.20f); glVertex2f(0.45f, 0.20f); glVertex2f(0.45f, 0.24f); glVertex2f(0.41f, 0.24f);
@@ -1561,7 +1558,7 @@ void drawBuildings() {
     glVertex2f(0.47f, 0.12f); glVertex2f(0.51f, 0.12f); glVertex2f(0.51f, 0.16f); glVertex2f(0.47f, 0.16f);
     glEnd();
 
-    // Police Station - Navy blue
+    // Police Station
     glColor3f(0.25f, 0.35f, 0.55f);
     glBegin(GL_QUADS);
     glVertex2f(0.58f, -0.15f);
@@ -1569,14 +1566,14 @@ void drawBuildings() {
     glVertex2f(0.82f, 0.33f);
     glVertex2f(0.58f, 0.33f);
     glEnd();
-    // Stepped roof
+    // roof
     glColor3f(0.20f, 0.28f, 0.44f);
     glBegin(GL_QUADS);
     glVertex2f(0.57f, 0.33f); glVertex2f(0.83f, 0.33f); glVertex2f(0.83f, 0.36f); glVertex2f(0.57f, 0.36f);
     glVertex2f(0.61f, 0.36f); glVertex2f(0.79f, 0.36f); glVertex2f(0.79f, 0.39f); glVertex2f(0.61f, 0.39f);
     glVertex2f(0.64f, 0.39f); glVertex2f(0.76f, 0.39f); glVertex2f(0.76f, 0.41f); glVertex2f(0.64f, 0.41f);
     glEnd();
-    // Badge - Gold
+    // Badge
     glColor3f(0.85f, 0.72f, 0.25f);
     glBegin(GL_QUADS);
     glVertex2f(0.68f, 0.24f); glVertex2f(0.72f, 0.24f); glVertex2f(0.72f, 0.28f); glVertex2f(0.68f, 0.28f);
@@ -1595,7 +1592,7 @@ void drawBuildings() {
     glVertex2f(0.68f, -0.15f); glVertex2f(0.72f, -0.15f); glVertex2f(0.72f, -0.05f); glVertex2f(0.68f, -0.05f);
     glEnd();
 
-    // Last building - Sandstone
+    // Last building
     glColor3f(0.70f, 0.62f, 0.52f);
     glBegin(GL_QUADS);
     glVertex2f(0.86f, -0.15f);
@@ -1631,7 +1628,7 @@ void drawBuildings() {
     glEnd();
 }
 
-// ========== Your grass ground ==========
+// grass ground
 void drawGround() {
     glColor3f(0.10f, 0.50f, 0.16f);
     glBegin(GL_QUADS);
@@ -1642,7 +1639,7 @@ void drawGround() {
     glEnd();
 }
 
-// ========== Helper: draw circle (for traffic light and wheels) ==========
+// draw circle (for traffic light and wheels)
 void drawCircle(float cx, float cy, float r) {
     glBegin(GL_POLYGON);
     for(int i = 0; i < 200; i++) {
@@ -1653,7 +1650,7 @@ void drawCircle(float cx, float cy, float r) {
     glEnd();
 }
 
-// ========== Topu's zebra lane helper ==========
+// zebra lane
 void drawZebraLane(float topY, float bottomY) {
     float y = topY;
     glBegin(GL_QUADS);
@@ -1667,7 +1664,7 @@ void drawZebraLane(float topY, float bottomY) {
     glEnd();
 }
 
-// ========== Topu's road with lanes, divider, zebra crossing ==========
+// road with lanes, divider, zebra crossing
 void drawRoad() {
     // Footpath
     glColor3f(0.55f, 0.55f, 0.55f);
@@ -1720,7 +1717,7 @@ void drawRoad() {
     drawZebraLane(-0.82f, -0.94f);  // lower lane 2
 }
 
-// ========== Topu's traffic light ==========
+// traffic light
 void drawTrafficLight() {
     // Pole
     glColor3f(0.25f, 0.25f, 0.25f);
@@ -1756,7 +1753,7 @@ void drawTrafficLight() {
     drawCircle(0.00f, 0.04f, 0.015f);
 }
 
-// ========== Topu's single car drawing ==========
+// single car drawing
 void drawSingleCar(float carX, float y, float r, float g, float b, int direction) {
     // Body
     glColor3f(r, g, b);
@@ -1784,7 +1781,7 @@ void drawSingleCar(float carX, float y, float r, float g, float b, int direction
     glVertex2f(carX + 0.18f, y + 0.14f); glVertex2f(carX + 0.13f, y + 0.14f);
     glEnd();
 
-    // Headlight and tail‑light
+    // Headlight and tail-light
     glBegin(GL_QUADS);
     if(direction == 1) {
         glColor3f(1.0f, 1.0f, 0.70f);
@@ -1813,7 +1810,7 @@ void drawSingleCar(float carX, float y, float r, float g, float b, int direction
     drawCircle(carX + 0.20f, y, 0.014f);
 }
 
-// ========== Topu's cars (8 vehicles) ==========
+// cars (8 vehicles)
 void drawCars() {
     drawSingleCar(car1X, -0.42f, 0.10f, 0.35f, 0.90f,  1); // blue
     drawSingleCar(car2X, -0.57f, 0.92f, 0.55f, 0.10f,  1); // orange
@@ -1827,7 +1824,7 @@ void drawCars() {
 
 
 
-// ========== Traffic logic (from Topu) ==========
+// Traffic logic
 float getGreenOrYellowSpeed() {
     if(lightState == 'G') return normalSpeed;
     if(lightState == 'Y') return slowSpeed;
@@ -1838,11 +1835,11 @@ void moveRightLane(float *frontCar, float *backCar, float speed) {
     float first = *frontCar;
     float second = *backCar;
 
-//    if(second > first) {
-//        float temp = first;
-//        first = second;
-//        second = temp;
-//    }
+    if(second > first) {
+        float temp = first;
+        first = second;
+        second = temp;
+    }
 
     if(lightState == 'R') {
         if(first + carWidth > rightStopX) {
@@ -1918,7 +1915,7 @@ void moveLeftLane(float *frontCar, float *backCar, float speed) {
     *backCar = second;
 }
 
-// ========== Combined display ==========
+
 void display() {
 
     if(showStartScreen == 1) {
@@ -1930,21 +1927,21 @@ void display() {
     drawSunMoon();
     drawClouds();
     drawRainClouds();
-    drawWindEffect();
     drawBuildings();
     drawGround();
     drawTrees();
     drawLampPosts();
     drawFlags();
-    drawRoad();            // Topu's road (overwrites the grass area)
+    drawRoad();
     drawTrafficLight();
     drawCars();
     drawRain();
+    drawWindEffect();
 
     glFlush();
 }
 
-// ========== Combined update ==========
+
 void update(int value) {
 
     if(showStartScreen == 1) {
@@ -1952,7 +1949,7 @@ void update(int value) {
     glutTimerFunc(20, update, 0);
     return;
     }
-    // ----- Cloud movement with wind -----
+    // Cloud movement with wind
     if(windDirection == 1) {
         cloudMove += 0.004f;      // wind left to right, clouds move faster right
     }
@@ -1978,23 +1975,26 @@ void update(int value) {
 
     for(int i = 0; i < RAIN_COUNT; i++) {
         rainY[i] -= rainSpeed[i];
-        rainX[i] += 0.004f;
+        rainX[i] += 0.001f;
         if(rainY[i] < -1.0f || rainX[i] > 1.05f) {
             rainY[i] = 1.05f;
             rainX[i] = -1.0f + (rand() % 200) / 100.0f;
         }
     }
 
+    // Night to Day
     if(dayValue < targetDayValue) {
         dayValue += 0.005f;
         if(dayValue > targetDayValue) dayValue = targetDayValue;
     }
+
+    // Day to Night
     if(dayValue > targetDayValue) {
         dayValue -= 0.005f;
         if(dayValue < targetDayValue) dayValue = targetDayValue;
     }
 
-    // ----- Topu's traffic updates -----
+
     if(running == 1) {
         float speed = getGreenOrYellowSpeed();
         moveRightLane(&car1X, &car5X, speed);
@@ -2003,7 +2003,7 @@ void update(int value) {
         moveLeftLane(&car4X, &car8X, speed);
     }
 
-    // ----- Wind update -----
+    // Wind
     if(windDirection != 0) {
         windWave += 0.15f;
         if(windWave > 6.28f) {
@@ -2015,7 +2015,7 @@ void update(int value) {
     glutTimerFunc(20, update, 0);
 }
 
-// ========== Combined keyboard handling ==========
+
 void handleKeypress(unsigned char key, int x, int y) {
     // Start screen control
     if(showStartScreen == 1) {
@@ -2045,7 +2045,7 @@ void handleKeypress(unsigned char key, int x, int y) {
             break;
     }
 
-    // Your environment controls (D/N for day/night, T for rain)
+
     if(key == 'd' || key == 'D') {
         targetDayValue = 1.0f;
     }
@@ -2061,6 +2061,7 @@ void handleKeypress(unsigned char key, int x, int y) {
         else
         {
             stopRainSound();
+            //startCitySound();
         }
     }
     // Wind controls
@@ -2077,7 +2078,7 @@ void handleKeypress(unsigned char key, int x, int y) {
     glutPostRedisplay();
 }
 
-// ========== Initialisation ==========
+
 void init() {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
